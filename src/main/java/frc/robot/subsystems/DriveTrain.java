@@ -39,7 +39,37 @@ public class DriveTrain extends SubsystemBase {
 
     Constants.rightfrontmotor.setInverted(true);
     Constants.rightbackmotor.setInverted(true);
+    
+    Constants.leftfrontmotor.configNominalOutputForward(0, 10);
+    Constants.leftfrontmotor.configNominalOutputReverse(0, 10);
+    Constants.leftfrontmotor.configPeakOutputForward(1, 10);
+    Constants.leftfrontmotor.configPeakOutputReverse(-1, 10);
+    Constants.leftfrontmotor.configNeutralDeadband(0.001, 10);
 
+    Constants.rightfrontmotor.configNominalOutputForward(0, 10);
+    Constants.rightfrontmotor.configNominalOutputReverse(0, 10);
+    Constants.rightfrontmotor.configPeakOutputForward(1, 10);
+    Constants.rightfrontmotor.configPeakOutputReverse(-1, 10);
+    Constants.rightfrontmotor.configNeutralDeadband(0.001, 10);
+
+    Constants.leftbackmotor.configNominalOutputForward(0, 10);
+    Constants.leftbackmotor.configNominalOutputReverse(0, 10);
+    Constants.leftbackmotor.configPeakOutputForward(1, 10);
+    Constants.leftbackmotor.configPeakOutputReverse(-1, 10);
+    Constants.leftbackmotor.configNeutralDeadband(0.001, 10);
+
+    Constants.rightbackmotor.configNominalOutputForward(0, 10);
+    Constants.rightbackmotor.configNominalOutputReverse(0, 10);
+    Constants.rightbackmotor.configPeakOutputForward(1, 10);
+    Constants.rightbackmotor.configPeakOutputReverse(-1, 10);
+    Constants.rightbackmotor.configNeutralDeadband(0.001, 10);
+
+  }
+  public void setModePercentVoltage(){
+    Constants.leftfrontmotor.set(ControlMode.PercentOutput, 0);
+    Constants.rightfrontmotor.set(ControlMode.PercentOutput, 0);
+    Constants.leftbackmotor.set(ControlMode.PercentOutput, 0);
+    Constants.rightbackmotor.set(ControlMode.PercentOutput, 0);
   }
   @Override
   public void periodic() {
