@@ -29,15 +29,15 @@ public class Joystickdrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double drive = drivecontroller.getRightY();
-    double rotate = drivecontroller.getLeftX();
-    if (drive <0.25 || drive >-0.25){
+    double drive = drivecontroller.getLeftY();
+    double rotate = drivecontroller.getRightX();
+    if ((drive <0.25 && drive >0)|| (drive <0 && drive >-0.25)){
       drive =0;
     }
     else {
       drive= drive*0.25;
     }
-    if (rotate<0.25 || rotate >-0.25){
+    if ((rotate>0 &&rotate<0.25)|| (rotate<0 &&rotate >-0.25)){
       rotate =0;
     }
     else {
