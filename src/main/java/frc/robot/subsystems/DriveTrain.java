@@ -24,7 +24,7 @@ public class DriveTrain extends SubsystemBase {
   private static final double Meters_Per_Ticks= 1/Ticks_Per_Meter;
   /** Creates a new DriveTrain. */
 
-  public void drive(double throttle, double rotate){
+  public static void drive(double throttle, double rotate){
    Constants.leftbackmotor.set(throttle + rotate);   
    Constants.rightbackmotor.set(throttle - rotate);
   }
@@ -41,7 +41,6 @@ public class DriveTrain extends SubsystemBase {
     Constants.rightbackmotor.setInverted(true);
 
   }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
