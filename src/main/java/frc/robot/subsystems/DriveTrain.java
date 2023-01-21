@@ -27,6 +27,9 @@ public class DriveTrain extends SubsystemBase {
   public static void drive(double throttle, double rotate){
    Constants.leftbackmotor.set(throttle + rotate);   
    Constants.rightbackmotor.set(throttle - rotate);
+   Constants.leftfrontmotor.set(throttle + rotate);
+   Constants.rightfrontmotor.set(throttle - rotate);
+
   }
   public DriveTrain() {
     Constants.leftfrontmotor.set(ControlMode.Follower, Constants.leftbackmotor.getDeviceID());
@@ -38,7 +41,9 @@ public class DriveTrain extends SubsystemBase {
     Constants.rightfrontmotor.setNeutralMode(NeutralMode.Coast);
 
     Constants.rightfrontmotor.setInverted(true);
+    Constants.leftbackmotor.setInverted(false);
     Constants.rightbackmotor.setInverted(true);
+    Constants.leftfrontmotor.setInverted(false);
     
     Constants.leftfrontmotor.configNominalOutputForward(0, 10);
     Constants.leftfrontmotor.configNominalOutputReverse(0, 10);
