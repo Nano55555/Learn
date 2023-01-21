@@ -35,13 +35,13 @@ public class Joystickdrive extends CommandBase {
       drive =0;
     }
     else {
-      drive= drive*0.25;
+      drive= drive*0.5;
     }
     if ((rotate>0 &&rotate<0.25)|| (rotate<0 &&rotate >-0.25)){
       rotate =0;
     }
     else {
-      rotate = rotate *0.5;
+      rotate = rotate *2;
     }
     DriveTrain.drive(drive,rotate);
   }
