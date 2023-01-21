@@ -11,12 +11,12 @@ import frc.robot.subsystems.DriveTrain;
 
 public class Joystickdrive extends CommandBase {
   /** Creates a new Joystickdrive. */
-  private static final XboxController drivecontroller = RobotContainer.drivercontroller;
-  private static final DriveTrain drivetrain = new DriveTrain();
+  private final static XboxController drivecontroller = RobotContainer.drivercontroller;
+  private final DriveTrain driveTrain;
 
-  public Joystickdrive(DriveTrain drivesubsystem ) {
-    drivesubsystem = drivetrain;
-    addRequirements(drivesubsystem);
+  public Joystickdrive(DriveTrain driveSubsystem ) {
+    driveTrain=driveSubsystem;
+    addRequirements(driveTrain);
     
     // Use addRequirements() here to declare subsystem dependencies.
     
@@ -41,9 +41,9 @@ public class Joystickdrive extends CommandBase {
       rotate =0;
     }
     else {
-      rotate = rotate *2;
+      rotate = rotate *0.25;
     }
-    DriveTrain.drive(drive,rotate);
+    driveTrain.drive(drive,rotate);
   }
 
   // Called once the command ends or is interrupted.

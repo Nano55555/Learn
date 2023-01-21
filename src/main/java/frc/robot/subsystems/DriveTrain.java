@@ -24,13 +24,6 @@ public class DriveTrain extends SubsystemBase {
   private static final double Meters_Per_Ticks= 1/Ticks_Per_Meter;
   /** Creates a new DriveTrain. */
 
-  public static void drive(double throttle, double rotate){
-   Constants.leftbackmotor.set(throttle + rotate);   
-   Constants.rightbackmotor.set(throttle - rotate);
-   Constants.leftfrontmotor.set(throttle + rotate);
-   Constants.rightfrontmotor.set(throttle - rotate);
-
-  }
   public DriveTrain() {
     Constants.leftfrontmotor.set(ControlMode.Follower, Constants.leftbackmotor.getDeviceID());
     Constants.rightfrontmotor.set(ControlMode.Follower, Constants.rightbackmotor.getDeviceID());
@@ -70,11 +63,21 @@ public class DriveTrain extends SubsystemBase {
     Constants.rightbackmotor.configNeutralDeadband(0.001, 10);
 
   }
+  public void drive(double throttle, double rotate){
+    Constants.leftbackmotor.set(throttle + rotate);   
+    Constants.rightbackmotor.set(throttle - rotate);
+    Constants.leftfrontmotor.set(throttle + rotate);
+    Constants.rightfrontmotor.set(throttle - rotate);
+ 
+   }
   public void setModePercentVoltage(){
     Constants.leftfrontmotor.set(ControlMode.PercentOutput, 0);
     Constants.rightfrontmotor.set(ControlMode.PercentOutput, 0);
     Constants.leftbackmotor.set(ControlMode.PercentOutput, 0);
     Constants.rightbackmotor.set(ControlMode.PercentOutput, 0);
+  }
+  public void stop(){
+  drive(0,0);
   }
   @Override
   public void periodic() {
