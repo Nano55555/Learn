@@ -4,7 +4,13 @@
 
 package frc.robot;
 
+import java.security.Timestamp;
+import java.util.concurrent.DelayQueue;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.DriveTrain;
@@ -17,9 +23,13 @@ import frc.robot.subsystems.DriveTrain;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
   public RobotContainer m_robotContainer;
   private DriveTrain driveTrain = m_robotContainer.driveTrain;
+
+  public static final WPI_TalonFX leftbackmotor = Constants.leftbackmotor;
+  public static final WPI_TalonFX leftfrontmotor = Constants.leftfrontmotor;
+  public static final WPI_TalonFX rightbackmotor = Constants.rightbackmotor;
+  public static final WPI_TalonFX rightfrontmotor = Constants.rightfrontmotor;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -58,7 +68,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    resetEncoders();
+    rightfrontmotor.setInverted(true);
+    leftbackmotor.setInverted(false);
+    rightbackmotor.setInverted(true);
+    leftfrontmotor.setInverted(false);
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -66,8 +80,58 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during autonomous. */
+  
+  public void resetEncoders() {
+    leftbackmotor.setSelectedSensorPosition(0);
+    rightbackmotor.setSelectedSensorPosition(0);
+    leftfrontmotor.setSelectedSensorPosition(0);
+    rightfrontmotor.setSelectedSensorPosition(0);
+  }
+  public double getRightBackEncoderPosition(){
+    return rightbackmotor.getSelectedSensorPosition();
+  }
+  public double getLeftBackEncoderPosition(){
+    return leftbackmotor.getSelectedSensorPosition();
+  }
+  
+  public double distanceTravelledTickPerMeter(){
+    return(getLeftBackEncoderPosition() + getRightBackEncoderPosition()) / 2;
+  }
+
+  private static final double In_To_M=.0254;
+  private static final int Motor_Encoder_Codes_Per_Rev=2048;
+  private static final double Diameter_Inches=5.0;
+  private static final double Wheel_Diameter= Diameter_Inches * In_To_M;
+  private static final double Wheel_Circumference= Wheel_Diameter * Math.PI;
+  private static final double Gear_Ratio=12.75;
+  private static final double Ticks_Per_Meter= ( Motor_Encoder_Codes_Per_Rev * Gear_Ratio)/(Wheel_Circumference);
+  private static final double Meters_Per_Ticks= 1/Ticks_Per_Meter;
+
+  public static double kP=0.065;
+  public static double kI =0;
+  public static double kD =0;
+  public static double lastimestamp = Timer.getFPGATimestamp();
+  public static double dt = Timer.getFPGATimestamp() - lastimestamp;
+  public static double setpoint= 2; //meter
+  public static double error;
+
+  public double currentpos = distanceTravelledTickPerMeter() *  Meters_Per_Ticks;
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    error = setpoint - currentpos;
+    double errorsum = dt * error;
+    double lasterror = error;
+    double errorrate= error - lasterror;
+
+    double output = ((error *kP) +(errorsum * kI) + (errorrate *kD));
+    leftbackmotor.set(output);
+    rightbackmotor.set(output);
+    rightfrontmotor.set(output);
+    leftfrontmotor.set(output);
+
+
+    
+  }
 
   @Override
   public void teleopInit() {

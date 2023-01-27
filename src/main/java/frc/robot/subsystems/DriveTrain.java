@@ -22,6 +22,8 @@ public class DriveTrain extends SubsystemBase {
   private static final double Gear_Ratio=12.75;
   private static final double Ticks_Per_Meter= ( Motor_Encoder_Codes_Per_Rev * Gear_Ratio)/(Wheel_Circumference);
   private static final double Meters_Per_Ticks= 1/Ticks_Per_Meter;
+
+
   /** Creates a new DriveTrain. */
 
   public DriveTrain() {
@@ -37,30 +39,7 @@ public class DriveTrain extends SubsystemBase {
     Constants.leftbackmotor.setInverted(false);
     Constants.rightbackmotor.setInverted(true);
     Constants.leftfrontmotor.setInverted(false);
-    
-    Constants.leftfrontmotor.configNominalOutputForward(0, 10);
-    Constants.leftfrontmotor.configNominalOutputReverse(0, 10);
-    Constants.leftfrontmotor.configPeakOutputForward(1, 10);
-    Constants.leftfrontmotor.configPeakOutputReverse(-1, 10);
-    Constants.leftfrontmotor.configNeutralDeadband(0.001, 10);
 
-    Constants.rightfrontmotor.configNominalOutputForward(0, 10);
-    Constants.rightfrontmotor.configNominalOutputReverse(0, 10);
-    Constants.rightfrontmotor.configPeakOutputForward(1, 10);
-    Constants.rightfrontmotor.configPeakOutputReverse(-1, 10);
-    Constants.rightfrontmotor.configNeutralDeadband(0.001, 10);
-
-    Constants.leftbackmotor.configNominalOutputForward(0, 10);
-    Constants.leftbackmotor.configNominalOutputReverse(0, 10);
-    Constants.leftbackmotor.configPeakOutputForward(1, 10);
-    Constants.leftbackmotor.configPeakOutputReverse(-1, 10);
-    Constants.leftbackmotor.configNeutralDeadband(0.001, 10);
-
-    Constants.rightbackmotor.configNominalOutputForward(0, 10);
-    Constants.rightbackmotor.configNominalOutputReverse(0, 10);
-    Constants.rightbackmotor.configPeakOutputForward(1, 10);
-    Constants.rightbackmotor.configPeakOutputReverse(-1, 10);
-    Constants.rightbackmotor.configNeutralDeadband(0.001, 10);
 
   }
   public void drive(double throttle, double rotate){
@@ -70,12 +49,6 @@ public class DriveTrain extends SubsystemBase {
     Constants.rightfrontmotor.set(throttle - rotate);
  
    }
-  public void setModePercentVoltage(){
-    Constants.leftfrontmotor.set(ControlMode.PercentOutput, 0);
-    Constants.rightfrontmotor.set(ControlMode.PercentOutput, 0);
-    Constants.leftbackmotor.set(ControlMode.PercentOutput, 0);
-    Constants.rightbackmotor.set(ControlMode.PercentOutput, 0);
-  }
   public void stop(){
   drive(0,0);
   }
