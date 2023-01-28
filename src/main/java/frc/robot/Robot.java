@@ -100,11 +100,13 @@ public class Robot extends TimedRobot {
     return leftbackmotor.getSelectedSensorPosition();
   }
   
-  public static double distanceTravelledTickPerMeter(){
+  public static double distanceTravelledTicks(){
     return(getLeftBackEncoderPosition() + getRightBackEncoderPosition()) / 2;
   }
 
-  
+  public static double distanceTravelledMetter(){
+    return(distanceTravelledTicks() *Meters_Per_Ticks);
+  }
   private static final double In_To_M=.0254;
   private static final int Motor_Encoder_Codes_Per_Rev=2048;
   private static final double Diameter_Inches=5.0;
@@ -121,11 +123,12 @@ public class Robot extends TimedRobot {
   public static double dt = Timer.getFPGATimestamp() - lastimestamp;
   public static double setpoint= 2; //meter
   public static double error;
-  public static double currrentpos = distanceTravelledTickPerMeter() *Meters_Per_Ticks;
 
   // @Override
   public void autonomousPeriodic() {
-    error = setpoint - currrentpos;
+  
+  double currrentpos = distanceTravelledMetter();
+  error = setpoint - currrentpos;
   double errorsum = dt * error;
   double lasterror = error;
   double errorrate= error - lasterror;
