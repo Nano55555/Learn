@@ -74,10 +74,41 @@ public class Robot extends TimedRobot {
     rightfrontmotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
     leftbackmotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
     rightbackmotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
+   
     rightfrontmotor.setInverted(true);
     leftbackmotor.setInverted(false);
     rightbackmotor.setInverted(true);
     leftfrontmotor.setInverted(false);
+   
+    leftfrontmotor.configNominalOutputForward(0, 10);
+    leftfrontmotor.configNominalOutputReverse(0, 10);
+    leftfrontmotor.configPeakOutputForward(1, 10);
+    leftfrontmotor.configPeakOutputReverse(-1, 10);
+    leftfrontmotor.configNeutralDeadband(0.001, 10);
+
+    rightfrontmotor.configNominalOutputForward(0, 10);
+    rightfrontmotor.configNominalOutputReverse(0, 10);
+    rightfrontmotor.configPeakOutputForward(1, 10);
+    rightfrontmotor.configPeakOutputReverse(-1, 10);
+    rightfrontmotor.configNeutralDeadband(0.001, 10);
+
+    leftbackmotor.configNominalOutputForward(0, 10);
+    leftbackmotor.configNominalOutputReverse(0, 10);
+    leftbackmotor.configPeakOutputForward(1, 10);
+    leftbackmotor.configPeakOutputReverse(-1, 10);
+    leftbackmotor.configNeutralDeadband(0.001, 10);
+
+    rightbackmotor.configNominalOutputForward(0, 10);
+    rightbackmotor.configNominalOutputReverse(0, 10);
+    rightbackmotor.configPeakOutputForward(1, 10);
+    rightbackmotor.configPeakOutputReverse(-1, 10);
+    rightbackmotor.configNeutralDeadband(0.001, 10);
+
+    // Sets how much error is allowed
+    leftfrontmotor.configAllowableClosedloopError(0, 0, 10);
+    leftbackmotor.configAllowableClosedloopError(0, 0, 10);
+    rightfrontmotor.configAllowableClosedloopError(0, 0, 10);
+    rightbackmotor.configAllowableClosedloopError(0, 0, 10);
 
     resetEncoders();
     // schedule the autonomous command (example)
