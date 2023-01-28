@@ -167,6 +167,7 @@ public class Robot extends TimedRobot {
 
     double output = ((error *kP)) +(errorsum * kI) + (errorrate *kD);
 
+    SmartDashboard.putNumber("output value", output);
    
 
     if(output >= 1){
