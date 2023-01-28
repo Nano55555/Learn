@@ -105,7 +105,8 @@ public class Robot extends TimedRobot {
   }
 
   public static double distanceTravelledMetter(){
-    return(distanceTravelledTicks() *Meters_Per_Ticks);
+    double dist =distanceTravelledTicks() *Meters_Per_Ticks;
+    return (dist);
   }
   private static final double In_To_M=.0254;
   private static final int Motor_Encoder_Codes_Per_Rev=2048;
@@ -116,7 +117,7 @@ public class Robot extends TimedRobot {
   private static final double Ticks_Per_Meter= ( Motor_Encoder_Codes_Per_Rev * Gear_Ratio)/(Wheel_Circumference);
   private static final double Meters_Per_Ticks= 1/Ticks_Per_Meter;
 
-  public static double kP=2;
+  public static double kP=1;
   public static double kI =0;
   public static double kD =0;
   public static double lastimestamp = Timer.getFPGATimestamp();
