@@ -10,6 +10,7 @@ import java.util.concurrent.DelayQueue;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,6 +33,36 @@ public class Robot extends TimedRobot {
   public static final WPI_TalonFX leftfrontmotor = Constants.leftfrontmotor;
   public static final WPI_TalonFX rightbackmotor = Constants.rightbackmotor;
   public static final WPI_TalonFX rightfrontmotor = Constants.rightfrontmotor;
+
+  public void resetEncoders() {
+    leftbackmotor.setSelectedSensorPosition(0);
+    rightbackmotor.setSelectedSensorPosition(0);
+    leftfrontmotor.setSelectedSensorPosition(0);
+    rightfrontmotor.setSelectedSensorPosition(0);
+  }
+  public static double getRightBackEncoderPosition(){
+    return rightbackmotor.getSelectedSensorPosition();
+  }
+
+  public static double distanceTravelledMetter(){
+    double dist = getRightBackEncoderPosition() *Meters_Per_Ticks;
+    return (dist);
+  }
+  private static final double In_To_M=.0254;
+  private static final int Motor_Encoder_Codes_Per_Rev=2048;
+  private static final double Diameter_Inches=5.0;
+  private static final double Wheel_Diameter= Diameter_Inches * In_To_M;
+  private static final double Wheel_Circumference= Wheel_Diameter * Math.PI;
+  private static final double Gear_Ratio=12.75;
+  private static final double Ticks_Per_Meter= ( Motor_Encoder_Codes_Per_Rev * Gear_Ratio)/(Wheel_Circumference);
+  private static final double Meters_Per_Ticks= 1/Ticks_Per_Meter;
+
+  public static double kP = 1;
+  public static double kI =0;
+  public static double kD =0;
+  public static double lastimestamp = Timer.getFPGATimestamp();
+  public static double dt = Timer.getFPGATimestamp() - lastimestamp;
+  public static double setpoint= 2; //meter
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -41,6 +72,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
   }
 
   /**
@@ -56,6 +88,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    SmartDashboard.putNumber("currentpos", distanceTravelledMetter());
     CommandScheduler.getInstance().run();
   }
 
@@ -79,36 +112,6 @@ public class Robot extends TimedRobot {
     leftbackmotor.setInverted(false);
     rightbackmotor.setInverted(true);
     leftfrontmotor.setInverted(false);
-   
-    leftfrontmotor.configNominalOutputForward(0, 10);
-    leftfrontmotor.configNominalOutputReverse(0, 10);
-    leftfrontmotor.configPeakOutputForward(1, 10);
-    leftfrontmotor.configPeakOutputReverse(-1, 10);
-    leftfrontmotor.configNeutralDeadband(0.001, 10);
-
-    rightfrontmotor.configNominalOutputForward(0, 10);
-    rightfrontmotor.configNominalOutputReverse(0, 10);
-    rightfrontmotor.configPeakOutputForward(1, 10);
-    rightfrontmotor.configPeakOutputReverse(-1, 10);
-    rightfrontmotor.configNeutralDeadband(0.001, 10);
-
-    leftbackmotor.configNominalOutputForward(0, 10);
-    leftbackmotor.configNominalOutputReverse(0, 10);
-    leftbackmotor.configPeakOutputForward(1, 10);
-    leftbackmotor.configPeakOutputReverse(-1, 10);
-    leftbackmotor.configNeutralDeadband(0.001, 10);
-
-    rightbackmotor.configNominalOutputForward(0, 10);
-    rightbackmotor.configNominalOutputReverse(0, 10);
-    rightbackmotor.configPeakOutputForward(1, 10);
-    rightbackmotor.configPeakOutputReverse(-1, 10);
-    rightbackmotor.configNeutralDeadband(0.001, 10);
-
-    // Sets how much error is allowed
-    leftfrontmotor.configAllowableClosedloopError(0, 0, 10);
-    leftbackmotor.configAllowableClosedloopError(0, 0, 10);
-    rightfrontmotor.configAllowableClosedloopError(0, 0, 10);
-    rightbackmotor.configAllowableClosedloopError(0, 0, 10);
 
     resetEncoders();
     // schedule the autonomous command (example)
@@ -118,56 +121,18 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during autonomous. */
-  public void resetEncoders() {
-    leftbackmotor.setSelectedSensorPosition(0);
-    rightbackmotor.setSelectedSensorPosition(0);
-    leftfrontmotor.setSelectedSensorPosition(0);
-    rightfrontmotor.setSelectedSensorPosition(0);
-  }
-  public static double getRightBackEncoderPosition(){
-    return rightbackmotor.getSelectedSensorPosition();
-  }
-  public static double getLeftBackEncoderPosition(){
-    return leftbackmotor.getSelectedSensorPosition();
-  }
-  
-  public static double distanceTravelledTicks(){
-    return(getLeftBackEncoderPosition() + getRightBackEncoderPosition()) / 2;
-  }
 
-  public static double distanceTravelledMetter(){
-    double dist =distanceTravelledTicks() *Meters_Per_Ticks;
-    return (dist);
-  }
-  private static final double In_To_M=.0254;
-  private static final int Motor_Encoder_Codes_Per_Rev=2048;
-  private static final double Diameter_Inches=5.0;
-  private static final double Wheel_Diameter= Diameter_Inches * In_To_M;
-  private static final double Wheel_Circumference= Wheel_Diameter * Math.PI;
-  private static final double Gear_Ratio=12.75;
-  private static final double Ticks_Per_Meter= ( Motor_Encoder_Codes_Per_Rev * Gear_Ratio)/(Wheel_Circumference);
-  private static final double Meters_Per_Ticks= 1/Ticks_Per_Meter;
-
-  public static double kP=1;
-  public static double kI =0;
-  public static double kD =0;
-  public static double lastimestamp = Timer.getFPGATimestamp();
-  public static double dt = Timer.getFPGATimestamp() - lastimestamp;
-  public static double setpoint= 2; //meter
-  public static double error;
 
   // @Override
   public void autonomousPeriodic() {
-  
+
   double currrentpos = distanceTravelledMetter();
-  error = setpoint - currrentpos;
+  double error = setpoint - currrentpos;
   double errorsum = dt * error;
   double lasterror = error;
   double errorrate= error - lasterror;
 
     double output = ((error *kP)) +(errorsum * kI) + (errorrate *kD);
-
-    SmartDashboard.putNumber("output value", output);
    
 
     if(output >= 1){

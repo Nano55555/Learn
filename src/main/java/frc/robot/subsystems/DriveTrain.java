@@ -8,6 +8,7 @@ import java.lang.ModuleLayer.Controller;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -40,6 +41,15 @@ public class DriveTrain extends SubsystemBase {
     Constants.rightbackmotor.setInverted(true);
     Constants.leftfrontmotor.setInverted(false);
 
+    Constants.leftfrontmotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
+    Constants.rightfrontmotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
+    Constants.leftbackmotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
+    Constants.rightbackmotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
+   
+    Constants.rightfrontmotor.setInverted(true);
+    Constants.leftbackmotor.setInverted(false);
+    Constants.rightbackmotor.setInverted(true);
+    Constants.leftfrontmotor.setInverted(false);
 
   }
   public void drive(double throttle, double rotate){
